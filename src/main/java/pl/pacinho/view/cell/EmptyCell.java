@@ -1,4 +1,9 @@
 package pl.pacinho.view.cell;
 
-public class EmptyCell extends Cell{
+import pl.pacinho.model.CellType;
+
+public class EmptyCell extends ImageCell {
+    public EmptyCell(int idx) {
+        super(CellType.EMPTY, idx);
+    }
 }

@@ -8,11 +8,12 @@ import java.awt.*;
 
 public class Board extends JFrame {
 
+    @Getter
     private JPanel boardPanel;
     private BoardController boardController;
 
     @Getter
-    private int size = 20;
+    private int boardSize = 21;
 
     public Board() {
 
@@ -30,13 +31,12 @@ public class Board extends JFrame {
     }
 
     private void init() {
-        boardPanel = new JPanel(new GridLayout(size, size));
+        boardPanel = new JPanel(new GridLayout(boardSize, boardSize));
     }
 
     private void initView() {
         Container main = this.getContentPane();
         main.setLayout(new BorderLayout());
-
         main.add(boardPanel, BorderLayout.CENTER);
     }
 }
