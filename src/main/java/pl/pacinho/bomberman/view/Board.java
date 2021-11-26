@@ -15,7 +15,7 @@ public class Board extends JFrame {
     private BoardController boardController;
 
     @Getter
-    private int boardSize = 31;
+    private int boardSize = 21;
 
     private Board self = this;
     public Board() {

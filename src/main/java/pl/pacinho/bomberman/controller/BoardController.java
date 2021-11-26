@@ -104,11 +104,45 @@ public class BoardController {
 
 
     public void keyPressed(KeyEvent e) {
-         if (e.getKeyCode() == KeyEvent.VK_RIGHT
+        if (e.getKeyCode() == KeyEvent.VK_RIGHT
                 || e.getKeyCode() == KeyEvent.VK_LEFT
                 || e.getKeyCode() == KeyEvent.VK_UP
                 || e.getKeyCode() == KeyEvent.VK_DOWN) {
             playerCell.setDirection(PlayerDirection.findByKey(e));
+            playerMove();
+            refresh();
         }
+
+    }
+
+    private void playerMove() {
+        if (playerCell.getDirection() == PlayerDirection.RIGHT) {
+            int nextPosition = playerCell.getIdx() + 1;
+            movePlayerCell(nextPosition);
+        } else if (playerCell.getDirection() == PlayerDirection.LEFT) {
+            int nextPosition = playerCell.getIdx() - 1;
+            movePlayerCell(nextPosition);
+        } else if (playerCell.getDirection() == PlayerDirection.DOWN) {
+            int nextPosition = playerCell.getIdx() + board.getBoardSize();
+            movePlayerCell(nextPosition);
+        } else if (playerCell.getDirection() == PlayerDirection.UP) {
+            int nextPosition = playerCell.getIdx() - board.getBoardSize();
+            movePlayerCell(nextPosition);
+        }
+    }
+
+    private void movePlayerCell(int nextPosition) {
+        Cell nextCell = (Cell) board.getBoardPanel().getComponents()[nextPosition];
+
+        if (nextCell.getCellType() == CellType.WALL
+                || nextCell.getCellType() == CellType.WALL_DESTRUCTIBLE) {
+            return;
+        }
+
+        board.getBoardPanel().remove(playerCell.getIdx());
+        board.getBoardPanel().add(new EmptyCell(playerCell.getIdx()), playerCell.getIdx());
+        board.getBoardPanel().remove(nextPosition);
+        playerCell.setIdx(nextPosition);
+        board.getBoardPanel().add(playerCell, nextPosition);
     }
 }

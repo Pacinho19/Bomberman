@@ -26,9 +26,9 @@ public class Images {
         return null;
     }
 
-    private static BufferedImage wallConstant = loadPNG("WallConstant.png");
-    private static BufferedImage wallDestructible = loadPNG("WallDestructible.png");
-    private static BufferedImage empty = loadPNG("Empty.png");
+    private static final BufferedImage wallConstant = loadPNG("WallConstant.png");
+    private static final BufferedImage wallDestructible = loadPNG("WallDestructible.png");
+    private static final BufferedImage empty = loadPNG("Empty.png");
 
 
     public static BufferedImage getImage(CellType cellType){
@@ -45,10 +45,10 @@ public class Images {
         return null;
     }
 
-    private static BufferedImage playerRight = loadPNG("PlayerRight.png");
-    private static BufferedImage playerLeft = loadPNG("PlayerLeft.png");
-    private static BufferedImage playerDown = loadPNG("PlayerDown.png");
-    private static BufferedImage playerUp = loadPNG("PlayerUp.png");
+    private static final BufferedImage playerRight = loadPNG("PlayerRight.png");
+    private static final BufferedImage playerLeft = loadPNG("PlayerLeft.png");
+    private static final BufferedImage playerDown = loadPNG("PlayerDown.png");
+    private static final BufferedImage playerUp = loadPNG("PlayerUp.png");
 
     public static BufferedImage getPlayerImageByDirection(PlayerDirection direction) {
         switch (direction) {
