@@ -1,8 +1,10 @@
 package pl.pacinho.bomberman.controller;
 
+import com.sun.deploy.net.MessageHeader;
 import lombok.Getter;
 import lombok.Setter;
 import pl.pacinho.bomberman.logic.BombExplosionThread;
+import pl.pacinho.bomberman.logic.MonsterMoveThread;
 import pl.pacinho.bomberman.model.CellType;
 import pl.pacinho.bomberman.model.PlayerEnemyDirection;
 import pl.pacinho.bomberman.utils.RandomUtils;
@@ -28,16 +30,19 @@ public class BoardController {
     private JPanel gameBoard;
 
     private List<Integer> bombsIdx;
+    @Getter
+    private List<Cell> enemies;
 
     @Getter
     private int boardSize;
-
     @Getter
     private int finishDoorIdx;
+
 
     public BoardController(Board board) {
         this.board = board;
         bombsIdx = new ArrayList<>();
+        enemies = new ArrayList<>();
         gameBoard = board.getBoardPanel();
         boardSize = board.getBoardSize();
     }
@@ -84,7 +89,11 @@ public class BoardController {
 
         Cell cell = cells.get(RandomUtils.getInt(0, cells.size()));
         gameBoard.remove(cell);
-        gameBoard.add(new EnemyCell(CellType.ENEMY_COIN, cell.getIdx()), cell.getIdx());
+        EnemyCell enemyCell = new EnemyCell(CellType.ENEMY_COIN, cell.getIdx());
+        gameBoard.add(enemyCell, cell.getIdx());
+
+        enemies.add(enemyCell);
+        new MonsterMoveThread(this, enemyCell).start();
     }
 
     private void initFinishDoorIndex() {
@@ -93,8 +102,8 @@ public class BoardController {
                 .filter(c -> c.getCellType() == CellType.WALL_DESTRUCTIBLE)
                 .collect(Collectors.toList());
 
-//        Cell cell = cells.get(RandomUtils.getInt(0, cells.size()));
-        Cell cell = cells.get(RandomUtils.getInt(0, 1));
+        Cell cell = cells.get(RandomUtils.getInt(0, cells.size()));
+//        Cell cell = cells.get(RandomUtils.getInt(0, 1));
         cell.setBorder(BorderFactory.createLineBorder(Color.RED));
         finishDoorIdx = cell.getIdx();
         System.out.println(finishDoorIdx);
@@ -192,7 +201,7 @@ public class BoardController {
             JOptionPane.showMessageDialog(board, "Game Over!");
             playerCell = null;
             return;
-        } else if (nextCell.getCellType() == CellType.DOOR) {
+        } else if (nextCell.getCellType() == CellType.DOOR && enemies.isEmpty()) {
             JOptionPane.showMessageDialog(board, "Level Complete!");
             playerCell = null;
             return;

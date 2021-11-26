@@ -1,5 +1,6 @@
 package pl.pacinho.bomberman.view.cell;
 
+import lombok.Getter;
 import lombok.Setter;
 import pl.pacinho.bomberman.logic.Images;
 import pl.pacinho.bomberman.model.CellType;
@@ -11,6 +12,8 @@ import java.awt.image.BufferedImage;
 
 public class EnemyCell extends Cell{
 
+    @Getter
+    @Setter
     private PlayerEnemyDirection direction;
 
     private ImageIcon image;

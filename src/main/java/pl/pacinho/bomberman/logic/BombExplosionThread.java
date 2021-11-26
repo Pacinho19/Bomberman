@@ -70,7 +70,7 @@ public class BombExplosionThread extends Thread {
         boardController.refresh();
 
         try {
-            Thread.sleep(1_500);
+            Thread.sleep(1_000);
         } catch (InterruptedException e) {
         }
 
