@@ -1,6 +1,6 @@
-package pl.pacinho.view.cell;
+package pl.pacinho.bomberman.view.cell;
 
-import pl.pacinho.model.CellType;
+import pl.pacinho.bomberman.model.CellType;
 
 public class EmptyCell extends ImageCell {
     public EmptyCell(int idx) {

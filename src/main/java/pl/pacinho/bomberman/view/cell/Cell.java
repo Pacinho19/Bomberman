@@ -1,11 +1,10 @@
-package pl.pacinho.view.cell;
+package pl.pacinho.bomberman.view.cell;
 
 import lombok.Getter;
 import lombok.Setter;
-import pl.pacinho.model.CellType;
+import pl.pacinho.bomberman.model.CellType;
 
 import javax.swing.*;
-import java.awt.*;
 
 public abstract class Cell extends JPanel {
 

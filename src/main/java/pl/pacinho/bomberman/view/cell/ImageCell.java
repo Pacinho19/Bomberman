@@ -1,14 +1,16 @@
-package pl.pacinho.view.cell;
+package pl.pacinho.bomberman.view.cell;
 
-import pl.pacinho.logic.Images;
-import pl.pacinho.model.CellType;
+import lombok.Getter;
+import lombok.Setter;
+import pl.pacinho.bomberman.logic.Images;
+import pl.pacinho.bomberman.model.CellType;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class ImageCell extends Cell {
 
+    @Setter
     private BufferedImage image;
 
     public ImageCell(CellType cellType, int idx) {

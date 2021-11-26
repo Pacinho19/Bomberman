@@ -1,6 +1,6 @@
-package pl.pacinho.run;
+package pl.pacinho.bomberman.run;
 
-import pl.pacinho.view.Board;
+import pl.pacinho.bomberman.view.Board;
 
 public class Main {
 
