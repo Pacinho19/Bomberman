@@ -3,7 +3,7 @@ package pl.pacinho.bomberman.model;
 import java.awt.event.KeyEvent;
 import java.util.Arrays;
 
-public enum PlayerDirection {
+public enum PlayerEnemyDirection {
 
     NONE(-1),
     UP(KeyEvent.VK_UP),
@@ -13,11 +13,11 @@ public enum PlayerDirection {
 
     private int keyEvent;
 
-    PlayerDirection(int keyEvent) {
+    PlayerEnemyDirection(int keyEvent) {
         this.keyEvent = keyEvent;
     }
 
-    public static PlayerDirection findByKey(KeyEvent e) {
+    public static PlayerEnemyDirection findByKey(KeyEvent e) {
         return Arrays.asList(values())
                 .stream()
                 .filter(d -> d.keyEvent == e.getKeyCode())

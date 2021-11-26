@@ -1,7 +1,7 @@
 package pl.pacinho.bomberman.logic;
 
 import pl.pacinho.bomberman.model.CellType;
-import pl.pacinho.bomberman.model.PlayerDirection;
+import pl.pacinho.bomberman.model.PlayerEnemyDirection;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -23,6 +23,7 @@ public class Images {
     private static final BufferedImage bombeExplosionHorizontal = loadPNG("BombExploHorizontal.png");
     private static final BufferedImage bombeExplosionVertical = loadPNG("BombExploVertical.png");
     private static final BufferedImage death = loadPNG("Death.png");
+    private static final BufferedImage door = loadPNG("Door.png");
 
     private static ImageIcon loadGIF(String name) {
         URL url = Images.class.getClassLoader().getResource("img/" + name + ".gif");
@@ -59,12 +60,14 @@ public class Images {
                 return bombeExplosionVertical;
             case DEATH:
                 return death;
+            case DOOR:
+                return door;
 
         }
         return null;
     }
 
-    public static BufferedImage getPlayerImageByDirection(PlayerDirection direction) {
+    public static BufferedImage getPlayerImageByDirection(PlayerEnemyDirection direction) {
         switch (direction) {
             case RIGHT:
                 return playerRight;
@@ -74,6 +77,16 @@ public class Images {
                 return playerUp;
             case DOWN:
                 return playerDown;
+        }
+        return null;
+    }
+
+    private static final ImageIcon enemyCoin = loadGIF("EnemyCoin");
+
+    public static ImageIcon getImageGIF(CellType cellType) {
+        switch (cellType){
+            case ENEMY_COIN:
+                return enemyCoin;
         }
         return null;
     }

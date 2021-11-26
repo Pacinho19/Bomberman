@@ -4,15 +4,13 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.pacinho.bomberman.logic.BombExplosionThread;
 import pl.pacinho.bomberman.model.CellType;
-import pl.pacinho.bomberman.model.PlayerDirection;
+import pl.pacinho.bomberman.model.PlayerEnemyDirection;
 import pl.pacinho.bomberman.utils.RandomUtils;
 import pl.pacinho.bomberman.view.Board;
-import pl.pacinho.bomberman.view.cell.Cell;
-import pl.pacinho.bomberman.view.cell.EmptyCell;
-import pl.pacinho.bomberman.view.cell.ImageCell;
-import pl.pacinho.bomberman.view.cell.PlayerCell;
+import pl.pacinho.bomberman.view.cell.*;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,6 +31,9 @@ public class BoardController {
 
     @Getter
     private int boardSize;
+
+    @Getter
+    private int finishDoorIdx;
 
     public BoardController(Board board) {
         this.board = board;
@@ -70,7 +71,33 @@ public class BoardController {
 
         addPlayer();
         addDestructibleWalls();
+        initFinishDoorIndex();
+        addEnemies();
         refresh();
+    }
+
+    private void addEnemies() {
+        List<Cell> cells = getCells()
+                .stream()
+                .filter(c -> c.getCellType() == CellType.EMPTY)
+                .collect(Collectors.toList());
+
+        Cell cell = cells.get(RandomUtils.getInt(0, cells.size()));
+        gameBoard.remove(cell);
+        gameBoard.add(new EnemyCell(CellType.ENEMY_COIN, cell.getIdx()), cell.getIdx());
+    }
+
+    private void initFinishDoorIndex() {
+        List<Cell> cells = getCells()
+                .stream()
+                .filter(c -> c.getCellType() == CellType.WALL_DESTRUCTIBLE)
+                .collect(Collectors.toList());
+
+//        Cell cell = cells.get(RandomUtils.getInt(0, cells.size()));
+        Cell cell = cells.get(RandomUtils.getInt(0, 1));
+        cell.setBorder(BorderFactory.createLineBorder(Color.RED));
+        finishDoorIdx = cell.getIdx();
+        System.out.println(finishDoorIdx);
     }
 
     private void addDestructibleWalls() {
@@ -113,7 +140,7 @@ public class BoardController {
     }
 
     public void keyPressed(KeyEvent e) {
-        if(playerCell==null){
+        if (playerCell == null) {
             return;
         }
 
@@ -121,7 +148,7 @@ public class BoardController {
                 || e.getKeyCode() == KeyEvent.VK_LEFT
                 || e.getKeyCode() == KeyEvent.VK_UP
                 || e.getKeyCode() == KeyEvent.VK_DOWN) {
-            playerCell.setDirection(PlayerDirection.findByKey(e));
+            playerCell.setDirection(PlayerEnemyDirection.findByKey(e));
             playerMove();
         } else if ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0) {
             setBomb();
@@ -139,16 +166,16 @@ public class BoardController {
     }
 
     public void playerMove() {
-        if (playerCell.getDirection() == PlayerDirection.RIGHT) {
+        if (playerCell.getDirection() == PlayerEnemyDirection.RIGHT) {
             int nextPosition = playerCell.getIdx() + 1;
             movePlayerCell(nextPosition);
-        } else if (playerCell.getDirection() == PlayerDirection.LEFT) {
+        } else if (playerCell.getDirection() == PlayerEnemyDirection.LEFT) {
             int nextPosition = playerCell.getIdx() - 1;
             movePlayerCell(nextPosition);
-        } else if (playerCell.getDirection() == PlayerDirection.DOWN) {
+        } else if (playerCell.getDirection() == PlayerEnemyDirection.DOWN) {
             int nextPosition = playerCell.getIdx() + boardSize;
             movePlayerCell(nextPosition);
-        } else if (playerCell.getDirection() == PlayerDirection.UP) {
+        } else if (playerCell.getDirection() == PlayerEnemyDirection.UP) {
             int nextPosition = playerCell.getIdx() - boardSize;
             movePlayerCell(nextPosition);
         }
@@ -157,13 +184,18 @@ public class BoardController {
     private void movePlayerCell(int nextPosition) {
         Cell nextCell = (Cell) gameBoard.getComponents()[nextPosition];
 
-        if(nextCell.getCellType() == CellType.BOMB_EXPLOSION_CENTER
-        || nextCell.getCellType() == CellType.BOMB_EXPLOSION_HORIZONTAL
-        || nextCell.getCellType() == CellType.BOMB_EXPLOSION_VERTICAL){
+        if (nextCell.getCellType() == CellType.BOMB_EXPLOSION_CENTER
+                || nextCell.getCellType() == CellType.BOMB_EXPLOSION_HORIZONTAL
+                || nextCell.getCellType() == CellType.BOMB_EXPLOSION_VERTICAL) {
             gameBoard.remove(playerCell.getIdx());
             gameBoard.add(new ImageCell(CellType.DEATH, playerCell.getIdx()), playerCell.getIdx());
-            JOptionPane.showMessageDialog(board, "Game Over !");
+            JOptionPane.showMessageDialog(board, "Game Over!");
             playerCell = null;
+            return;
+        } else if (nextCell.getCellType() == CellType.DOOR) {
+            JOptionPane.showMessageDialog(board, "Level Complete!");
+            playerCell = null;
+            return;
         }
 
         if (nextCell.getCellType() != CellType.EMPTY) {

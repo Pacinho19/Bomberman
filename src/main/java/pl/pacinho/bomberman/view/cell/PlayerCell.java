@@ -3,12 +3,12 @@ package pl.pacinho.bomberman.view.cell;
 import lombok.Getter;
 import pl.pacinho.bomberman.logic.Images;
 import pl.pacinho.bomberman.model.CellType;
-import pl.pacinho.bomberman.model.PlayerDirection;
+import pl.pacinho.bomberman.model.PlayerEnemyDirection;
 
 public class PlayerCell extends ImageCell {
 
     @Getter
-    private PlayerDirection direction;
+    private PlayerEnemyDirection direction;
 
     @Getter
     private int bombCount = 1;
@@ -18,10 +18,10 @@ public class PlayerCell extends ImageCell {
 
     public PlayerCell(CellType cellType, int idx) {
         super(cellType, idx);
-        setDirection(PlayerDirection.RIGHT);
+        setDirection(PlayerEnemyDirection.RIGHT);
     }
 
-    public void setDirection(PlayerDirection direction) {
+    public void setDirection(PlayerEnemyDirection direction) {
         this.direction = direction;
         this.setImage(Images.getPlayerImageByDirection(direction));
     }

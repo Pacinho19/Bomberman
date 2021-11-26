@@ -75,8 +75,12 @@ public class BombExplosionThread extends Thread {
         }
 
         for (Cell cell : explosionCellsIdx) {
+            if(cell.getIdx()==boardController.getFinishDoorIdx()){
+                continue;
+            }
             gameBoard.remove(cell);
             gameBoard.add(new ImageCell(CellType.EMPTY, cell.getIdx()), cell.getIdx());
+
         }
         boardController.refresh();
 
@@ -111,6 +115,8 @@ public class BombExplosionThread extends Thread {
         if (nextCell.getCellType() == CellType.PLAYER) {
             playerKill = true;
             imageCell = new ImageCell(CellType.DEATH, idx);
+        } else if (idx == boardController.getFinishDoorIdx()) {
+            imageCell = new ImageCell(CellType.DOOR, idx);
         }
 
         gameBoard.remove(idx);

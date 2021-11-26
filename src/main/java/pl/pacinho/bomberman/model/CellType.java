@@ -10,9 +10,9 @@ public enum CellType {
     BOMB_EXPLOSION_HORIZONTAL,
     BOMB_EXPLOSION_VERTICAL,
     DEATH,
-    MONSTER,
+    ENEMY_COIN,
     BONUS,
-    FINISH,
+    DOOR,
     EMPTY
 
 
