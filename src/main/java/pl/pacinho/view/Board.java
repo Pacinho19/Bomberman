@@ -17,7 +17,7 @@ public class Board extends JFrame {
 
     public Board() {
 
-        this.setTitle("Pacman");
+        this.setTitle("Bomberman");
         this.setSize(1000, 1000);
 
         this.setLocationRelativeTo(null);
