@@ -26,6 +26,8 @@ public class Images {
     private static final BufferedImage door = loadPNG("Door.png");
     private static final BufferedImage playerInDoor = loadPNG("PlayerInDoor.png");
     private static final BufferedImage playerOnBomb = loadPNG("PlayerOnBomb.png");
+    private static final BufferedImage bombBonus =loadPNG("BombBonus.png");
+    private static final ImageIcon enemyCoin = loadGIF("EnemyCoin");
 
     private static ImageIcon loadGIF(String name) {
         URL url = Images.class.getClassLoader().getResource("img/" + name + ".gif");
@@ -44,22 +46,22 @@ public class Images {
 
     public static BufferedImage getImage(CellType cellType) {
         switch (cellType) {
-            case WALL:
-                return wallConstant;
-            case WALL_DESTRUCTIBLE:
-                return wallDestructible;
-            case EMPTY:
-                return empty;
-            case PLAYER:
-                return playerRight;
-            case BOMB:
-            return bomb;
             case BOMB_EXPLOSION_CENTER:
                 return bombeExplosionCenter;
             case BOMB_EXPLOSION_HORIZONTAL:
                 return bombeExplosionHorizontal;
             case BOMB_EXPLOSION_VERTICAL:
                 return bombeExplosionVertical;
+            case WALL_DESTRUCTIBLE:
+                return wallDestructible;
+            case WALL:
+                return wallConstant;
+            case EMPTY:
+                return empty;
+            case PLAYER:
+                return playerRight;
+            case BOMB:
+                return bomb;
             case DEATH:
                 return death;
             case DOOR:
@@ -68,6 +70,8 @@ public class Images {
                 return playerInDoor;
             case PLAYER_ON_BOMB:
                 return playerOnBomb;
+            case BOMB_BONUS:
+                return bombBonus;
         }
         return null;
     }
@@ -86,10 +90,8 @@ public class Images {
         return null;
     }
 
-    private static final ImageIcon enemyCoin = loadGIF("EnemyCoin");
-
     public static ImageIcon getImageGIF(CellType cellType) {
-        switch (cellType){
+        switch (cellType) {
             case ENEMY_COIN:
                 return enemyCoin;
         }

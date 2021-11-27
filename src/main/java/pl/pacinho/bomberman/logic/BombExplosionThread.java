@@ -82,7 +82,8 @@ public class BombExplosionThread extends Thread {
         }
 
         for (Cell cell : explosionCellsIdx) {
-            if (cell.getIdx() == boardController.getFinishDoorIdx()) {
+            if (cell.getIdx() == boardController.getFinishDoorIdx()
+                    || cell.getIdx() == boardController.getBonus().getIdx()) {
                 continue;
             }
             gameBoard.remove(cell);
@@ -130,6 +131,8 @@ public class BombExplosionThread extends Thread {
             imageCell = new ImageCell(CellType.DEATH, idx);
         } else if (idx == boardController.getFinishDoorIdx()) {
             imageCell = new ImageCell(CellType.DOOR, idx);
+        } else if (idx == boardController.getBonus().getIdx()) {
+            imageCell = new ImageCell(CellType.BOMB_BONUS, idx);
         } else if (nextCell.getCellType() == CellType.ENEMY_COIN) {
             EnemyCell enemyCell = (EnemyCell) nextCell;
             //enemyCell.getMonsterMoveThread().interrupt();

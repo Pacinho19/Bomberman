@@ -15,6 +15,7 @@ public enum CellType {
     DOOR,
     PLAYER_IN_DOOR,
     PLAYER_ON_BOMB,
+    BOMB_BONUS,
     EMPTY
 
 
