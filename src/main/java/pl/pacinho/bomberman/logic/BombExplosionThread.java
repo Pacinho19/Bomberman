@@ -4,6 +4,7 @@ import pl.pacinho.bomberman.controller.BoardController;
 import pl.pacinho.bomberman.model.CellType;
 import pl.pacinho.bomberman.model.ExplosionDirection;
 import pl.pacinho.bomberman.view.cell.Cell;
+import pl.pacinho.bomberman.view.cell.EnemyCell;
 import pl.pacinho.bomberman.view.cell.ImageCell;
 
 import javax.swing.*;
@@ -75,7 +76,7 @@ public class BombExplosionThread extends Thread {
         }
 
         for (Cell cell : explosionCellsIdx) {
-            if(cell.getIdx()==boardController.getFinishDoorIdx()){
+            if (cell.getIdx() == boardController.getFinishDoorIdx()) {
                 continue;
             }
             gameBoard.remove(cell);
@@ -93,7 +94,9 @@ public class BombExplosionThread extends Thread {
     private void addExplosionCell(CellType cellType, int idx, ExplosionDirection explosionDirection) {
         Component[] components = gameBoard.getComponents();
         Cell nextCell = (Cell) components[idx];
-        if (nextCell.getCellType() == CellType.WALL) {
+        if (nextCell.getCellType() == CellType.WALL
+                || nextCell.getCellType() == CellType.WALL_DESTRUCTIBLE
+                || nextCell.getCellType() == CellType.ENEMY_COIN) {
             switch (explosionDirection) {
                 case UP:
                     up = false;
@@ -108,7 +111,10 @@ public class BombExplosionThread extends Thread {
                     right = false;
                     break;
             }
-            return;
+
+            if (nextCell.getCellType() == CellType.WALL) {
+                return;
+            }
         }
 
         ImageCell imageCell = new ImageCell(cellType, idx);
@@ -117,8 +123,11 @@ public class BombExplosionThread extends Thread {
             imageCell = new ImageCell(CellType.DEATH, idx);
         } else if (idx == boardController.getFinishDoorIdx()) {
             imageCell = new ImageCell(CellType.DOOR, idx);
+        } else if (nextCell.getCellType() == CellType.ENEMY_COIN) {
+            EnemyCell enemyCell = (EnemyCell) nextCell;
+            enemyCell.getMonsterMoveThread().interrupt();
+            boardController.getEnemies().remove(nextCell);
         }
-
         gameBoard.remove(idx);
         gameBoard.add(imageCell, idx);
         explosionCellsIdx.add(imageCell);

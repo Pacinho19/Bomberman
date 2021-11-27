@@ -56,17 +56,44 @@ public class MonsterMoveThread extends Thread implements ActionListener {
                 .findFirst()
                 .orElse(null);
 
-        if (cell!=null
-                && cell.getCellType() != CellType.WALL
+        if (cell == null) {
+            PlayerEnemyDirection direction = RandomUtils.getEnemyDirection();
+            enemyCell.setDirection(direction);
+            return;
+        }
+
+
+        if (cell.getCellType() == CellType.BOMB_EXPLOSION_VERTICAL
+                || cell.getCellType() == CellType.BOMB_EXPLOSION_HORIZONTAL) {
+            controller.getGameBoard().remove(enemyCell.getIdx());
+            controller.getGameBoard().add(new EmptyCell(enemyCell.getIdx()), enemyCell.getIdx());
+            controller.getEnemies().remove(enemyCell);
+            timer.stop();
+            Thread.interrupted();
+            return;
+        }
+
+        if (cell.getCellType() != CellType.WALL
                 && cell.getCellType() != CellType.WALL_DESTRUCTIBLE
-                && cell.getCellType() != CellType.BOMB) {
+                && cell.getCellType() != CellType.BOMB
+                && cell.getCellType() != CellType.BOMB_EXPLOSION_VERTICAL
+                && cell.getCellType() != CellType.BOMB_EXPLOSION_HORIZONTAL) {
             controller.getGameBoard().remove(enemyCell.getIdx());
             controller.getGameBoard().add(new EmptyCell(enemyCell.getIdx()), enemyCell.getIdx());
             controller.getGameBoard().remove(cell);
             controller.getGameBoard().add(enemyCell, nextIdx);
             enemyCell.setIdx(nextIdx);
         }
-        PlayerEnemyDirection direction = RandomUtils.getEnemyDirection();
+
+        if(cell.getCellType()==CellType.PLAYER) {
+            JOptionPane.showMessageDialog(controller.getGameBoard(), "Game Over !");
+            controller.setPlayerCell(null);
+            Thread.interrupted();
+            timer.stop();
+            return;
+        }
+
+            PlayerEnemyDirection direction = RandomUtils.getEnemyDirection();
         enemyCell.setDirection(direction);
     }
 }

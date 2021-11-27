@@ -1,6 +1,5 @@
 package pl.pacinho.bomberman.controller;
 
-import com.sun.deploy.net.MessageHeader;
 import lombok.Getter;
 import lombok.Setter;
 import pl.pacinho.bomberman.logic.BombExplosionThread;
@@ -18,21 +17,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class BoardController {
 
+    private final int enemiesCount = 5;
     private Board board;
-
     @Getter
     @Setter
     private PlayerCell playerCell;
     @Getter
     private JPanel gameBoard;
-
     private List<Integer> bombsIdx;
     @Getter
-    private List<Cell> enemies;
-
+    private List<EnemyCell> enemies;
     @Getter
     private int boardSize;
     @Getter
@@ -77,7 +75,7 @@ public class BoardController {
         addPlayer();
         addDestructibleWalls();
         initFinishDoorIndex();
-        addEnemies();
+        IntStream.range(0, enemiesCount).forEach(i -> addEnemies());
         refresh();
     }
 
@@ -93,7 +91,9 @@ public class BoardController {
         gameBoard.add(enemyCell, cell.getIdx());
 
         enemies.add(enemyCell);
-        new MonsterMoveThread(this, enemyCell).start();
+        MonsterMoveThread monsterMoveThread = new MonsterMoveThread(this, enemyCell);
+        monsterMoveThread.start();
+        enemyCell.setMonsterMoveThread(monsterMoveThread);
     }
 
     private void initFinishDoorIndex() {

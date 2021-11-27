@@ -3,6 +3,7 @@ package pl.pacinho.bomberman.view.cell;
 import lombok.Getter;
 import lombok.Setter;
 import pl.pacinho.bomberman.logic.Images;
+import pl.pacinho.bomberman.logic.MonsterMoveThread;
 import pl.pacinho.bomberman.model.CellType;
 import pl.pacinho.bomberman.model.PlayerEnemyDirection;
 
@@ -15,6 +16,10 @@ public class EnemyCell extends Cell{
     @Getter
     @Setter
     private PlayerEnemyDirection direction;
+
+    @Getter
+    @Setter
+    private MonsterMoveThread monsterMoveThread;
 
     private ImageIcon image;
 
