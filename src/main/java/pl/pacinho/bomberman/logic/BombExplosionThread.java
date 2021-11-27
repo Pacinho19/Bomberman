@@ -125,7 +125,7 @@ public class BombExplosionThread extends Thread {
             imageCell = new ImageCell(CellType.DOOR, idx);
         } else if (nextCell.getCellType() == CellType.ENEMY_COIN) {
             EnemyCell enemyCell = (EnemyCell) nextCell;
-            enemyCell.getMonsterMoveThread().interrupt();
+            //enemyCell.getMonsterMoveThread().interrupt();
             boardController.getEnemies().remove(nextCell);
         }
         gameBoard.remove(idx);

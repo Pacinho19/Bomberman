@@ -63,6 +63,22 @@ public class MonsterMoveThread extends Thread implements ActionListener {
         }
 
 
+        Cell cell2 = Arrays.stream(controller.getGameBoard().getComponents())
+                .map(c -> (Cell) c)
+                .filter(c -> c.getIdx() == enemyCell.getIdx())
+                .findFirst()
+                .orElse(null);
+
+        if (cell2 != null
+                && (cell2.getCellType() == CellType.BOMB_EXPLOSION_VERTICAL
+                || cell2.getCellType() == CellType.BOMB_EXPLOSION_HORIZONTAL)){
+            controller.getEnemies().remove(enemyCell);
+            timer.stop();
+            Thread.interrupted();
+            return;
+        }
+
+
         if (cell.getCellType() == CellType.BOMB_EXPLOSION_VERTICAL
                 || cell.getCellType() == CellType.BOMB_EXPLOSION_HORIZONTAL) {
             controller.getGameBoard().remove(enemyCell.getIdx());
@@ -85,7 +101,7 @@ public class MonsterMoveThread extends Thread implements ActionListener {
             enemyCell.setIdx(nextIdx);
         }
 
-        if(cell.getCellType()==CellType.PLAYER) {
+        if (cell.getCellType() == CellType.PLAYER) {
             JOptionPane.showMessageDialog(controller.getGameBoard(), "Game Over !");
             controller.setPlayerCell(null);
             Thread.interrupted();
@@ -93,7 +109,7 @@ public class MonsterMoveThread extends Thread implements ActionListener {
             return;
         }
 
-            PlayerEnemyDirection direction = RandomUtils.getEnemyDirection();
+        PlayerEnemyDirection direction = RandomUtils.getEnemyDirection();
         enemyCell.setDirection(direction);
     }
 }
