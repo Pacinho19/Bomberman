@@ -39,11 +39,17 @@ public class BombExplosionThread extends Thread {
         } catch (InterruptedException e) {
         }
 
+        Component[] components = gameBoard.getComponents();
+        Cell cell2 = (Cell) components[idx];
+        if (cell2.getCellType().equals(CellType.PLAYER)
+                || cell2.getCellType().equals(CellType.PLAYER_ON_BOMB)) {
+            playerKill = true;
+        }
+
         gameBoard.remove(idx);
         Cell center = new ImageCell(CellType.BOMB_EXPLOSION_CENTER, idx);
         gameBoard.add(center, idx);
         boardController.removeBomb(idx);
-
 
         explosionCellsIdx.add(center);
 
@@ -81,14 +87,15 @@ public class BombExplosionThread extends Thread {
             }
             gameBoard.remove(cell);
             gameBoard.add(new ImageCell(CellType.EMPTY, cell.getIdx()), cell.getIdx());
-
         }
-        boardController.refresh();
+
 
         if (playerKill) {
             JOptionPane.showMessageDialog(boardController.getGameBoard(), "Game Over !");
             boardController.setPlayerCell(null);
         }
+
+        boardController.refresh();
     }
 
     private void addExplosionCell(CellType cellType, int idx, ExplosionDirection explosionDirection) {

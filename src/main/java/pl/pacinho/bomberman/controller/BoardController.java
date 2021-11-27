@@ -172,6 +172,9 @@ public class BoardController {
         bombsIdx.add(playerCell.getIdx());
         new BombExplosionThread(this, playerCell.getIdx())
                 .start();
+
+        gameBoard.remove(playerCell.getIdx());
+        gameBoard.add(new ImageCell(CellType.PLAYER_ON_BOMB, playerCell.getIdx()), playerCell.getIdx());
     }
 
     public void playerMove() {
@@ -202,6 +205,11 @@ public class BoardController {
             playerCell = null;
             return;
         } else if (nextCell.getCellType() == CellType.DOOR && enemies.isEmpty()) {
+            gameBoard.remove(playerCell.getIdx());
+            gameBoard.add(new EmptyCell(playerCell.getIdx()), playerCell.getIdx());
+            gameBoard.remove(nextPosition);
+            gameBoard.add(new ImageCell(CellType.PLAYER_IN_DOOR, nextPosition), nextPosition);
+            refresh();
             JOptionPane.showMessageDialog(board, "Level Complete!");
             playerCell = null;
             return;

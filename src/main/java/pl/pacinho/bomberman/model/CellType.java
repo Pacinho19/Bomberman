@@ -13,6 +13,8 @@ public enum CellType {
     ENEMY_COIN,
     BONUS,
     DOOR,
+    PLAYER_IN_DOOR,
+    PLAYER_ON_BOMB,
     EMPTY
 
 

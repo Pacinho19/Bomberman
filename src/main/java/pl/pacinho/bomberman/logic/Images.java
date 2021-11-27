@@ -24,6 +24,8 @@ public class Images {
     private static final BufferedImage bombeExplosionVertical = loadPNG("BombExploVertical.png");
     private static final BufferedImage death = loadPNG("Death.png");
     private static final BufferedImage door = loadPNG("Door.png");
+    private static final BufferedImage playerInDoor = loadPNG("PlayerInDoor.png");
+    private static final BufferedImage playerOnBomb = loadPNG("PlayerOnBomb.png");
 
     private static ImageIcon loadGIF(String name) {
         URL url = Images.class.getClassLoader().getResource("img/" + name + ".gif");
@@ -62,7 +64,10 @@ public class Images {
                 return death;
             case DOOR:
                 return door;
-
+            case PLAYER_IN_DOOR:
+                return playerInDoor;
+            case PLAYER_ON_BOMB:
+                return playerOnBomb;
         }
         return null;
     }
