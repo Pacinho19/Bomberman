@@ -104,7 +104,10 @@ public class BombExplosionThread extends Thread {
         Cell nextCell = (Cell) components[idx];
         if (nextCell.getCellType() == CellType.WALL
                 || nextCell.getCellType() == CellType.WALL_DESTRUCTIBLE
-                || nextCell.getCellType() == CellType.ENEMY_COIN) {
+                || nextCell.getCellType() == CellType.ENEMY_COIN
+                || nextCell.getCellType() == CellType.BOMB_EXPLOSION_HORIZONTAL
+                || nextCell.getCellType() == CellType.BOMB_EXPLOSION_VERTICAL
+                || nextCell.getCellType() == CellType.BOMB_EXPLOSION_CENTER) {
             switch (explosionDirection) {
                 case UP:
                     up = false;
@@ -120,7 +123,10 @@ public class BombExplosionThread extends Thread {
                     break;
             }
 
-            if (nextCell.getCellType() == CellType.WALL) {
+            if (nextCell.getCellType() == CellType.WALL
+                    || nextCell.getCellType() == CellType.BOMB_EXPLOSION_HORIZONTAL
+                    || nextCell.getCellType() == CellType.BOMB_EXPLOSION_VERTICAL
+                    || nextCell.getCellType() == CellType.BOMB_EXPLOSION_CENTER) {
                 return;
             }
         }

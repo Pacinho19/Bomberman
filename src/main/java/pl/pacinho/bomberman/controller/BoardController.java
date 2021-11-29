@@ -90,8 +90,9 @@ public class BoardController {
                 .filter(c -> c.getCellType() == CellType.WALL_DESTRUCTIBLE)
                 .collect(Collectors.toList());
 
-        Cell cell = cells.get(RandomUtils.getInt(0, cells.size()));
-//        Cell cell = cells.get(RandomUtils.getInt(0, 1));
+
+//        Cell cell = cells.get(RandomUtils.getInt(0, cells.size()));
+        Cell cell = cells.get(RandomUtils.getInt(1, 2));
         cell.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
         bonus = new Bonus(RandomUtils.getBonus(), cell.getIdx());
     }
@@ -213,6 +214,11 @@ public class BoardController {
     private void movePlayerCell(int nextPosition) {
         Cell nextCell = (Cell) gameBoard.getComponents()[nextPosition];
 
+        if (nextCell.getCellType() == CellType.WALL
+                || nextCell.getCellType() == CellType.WALL_DESTRUCTIBLE) {
+            return;
+        }
+
         if (nextCell.getCellType() == CellType.BOMB_EXPLOSION_CENTER
                 || nextCell.getCellType() == CellType.BOMB_EXPLOSION_HORIZONTAL
                 || nextCell.getCellType() == CellType.BOMB_EXPLOSION_VERTICAL) {
@@ -230,23 +236,26 @@ public class BoardController {
             JOptionPane.showMessageDialog(board, "Level Complete!");
             playerCell = null;
             return;
-        }else if(nextCell.getCellType() == CellType.DOOR && !enemies.isEmpty()){
+        } else if (nextCell.getCellType() == CellType.DOOR && !enemies.isEmpty()) {
             gameBoard.remove(playerCell.getIdx());
             gameBoard.add(new EmptyCell(playerCell.getIdx()), playerCell.getIdx());
             gameBoard.remove(nextPosition);
             gameBoard.add(new ImageCell(CellType.PLAYER_IN_DOOR, nextPosition), nextPosition);
             playerCell.setIdx(nextPosition);
             return;
-        }else if(playerCell.getIdx()==finishDoorIdx){
+        } else if (playerCell.getIdx() == finishDoorIdx) {
             gameBoard.remove(playerCell.getIdx());
             gameBoard.add(new ImageCell(CellType.DOOR, playerCell.getIdx()), playerCell.getIdx());
             gameBoard.remove(nextPosition);
             gameBoard.add(playerCell, nextPosition);
             playerCell.setIdx(nextPosition);
             return;
+        } else if (nextCell.getCellType() == CellType.BOMB_BONUS) {
+            playerCell.addBomb();
         }
 
-        if (nextCell.getCellType() != CellType.EMPTY) {
+        if (nextCell.getCellType() != CellType.EMPTY
+                && nextCell.getCellType() != CellType.BOMB_BONUS) {
             return;
         }
 
