@@ -35,7 +35,7 @@ public class BombExplosionThread extends Thread {
     @Override
     public void run() {
         try {
-            Thread.sleep(3_000);
+            Thread.sleep(2_000);
         } catch (InterruptedException e) {
         }
 

@@ -30,7 +30,7 @@ import java.util.stream.IntStream;
 
 public class BoardController {
 
-    private final int enemiesCount = 1;
+    private final int enemiesCount = 5;
     private Board board;
     @Getter
     @Setter
@@ -99,8 +99,8 @@ public class BoardController {
                 .collect(Collectors.toList());
 
 
-//        Cell cell = cells.get(RandomUtils.getInt(0, cells.size()));
-        Cell cell = cells.get(RandomUtils.getInt(1, 2));
+        Cell cell = cells.get(RandomUtils.getInt(0, cells.size()));
+//        Cell cell = cells.get(RandomUtils.getInt(1, 2));
         cell.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
         bonus = new Bonus(RandomUtils.getBonus(), cell.getIdx());
     }
@@ -128,8 +128,8 @@ public class BoardController {
                 .filter(c -> c.getCellType() == CellType.WALL_DESTRUCTIBLE)
                 .collect(Collectors.toList());
 
-//        Cell cell = cells.get(RandomUtils.getInt(0, cells.size()));
-        Cell cell = cells.get(RandomUtils.getInt(0, 1));
+        Cell cell = cells.get(RandomUtils.getInt(0, cells.size()));
+//        Cell cell = cells.get(RandomUtils.getInt(0, 1));
         cell.setBorder(BorderFactory.createLineBorder(Color.RED));
         finishDoorIdx = cell.getIdx();
         System.out.println(finishDoorIdx);
