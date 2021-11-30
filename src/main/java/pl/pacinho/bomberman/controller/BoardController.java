@@ -158,6 +158,14 @@ public class BoardController {
                 .collect(Collectors.toList());
     }
 
+    private Cell getCellAt(int idx) {
+        return getCells()
+                .stream()
+                .filter(c -> c.getIdx() == idx)
+                .findFirst()
+                .orElse(null);
+    }
+
 
     private void addPlayer() {
         int pos = boardSize + 1;
@@ -178,7 +186,14 @@ public class BoardController {
             playerCell.setDirection(PlayerEnemyDirection.findByKey(e));
             playerMove();
         } else if ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0) {
-            setBomb();
+            Cell cellAt = getCellAt(playerCell.getIdx());
+            if (cellAt == null) {
+                return;
+            }
+
+            if (cellAt.getCellType() == CellType.PLAYER) {
+                setBomb();
+            }
         }
         refresh();
     }
@@ -238,7 +253,11 @@ public class BoardController {
             return;
         } else if (nextCell.getCellType() == CellType.DOOR && !enemies.isEmpty()) {
             gameBoard.remove(playerCell.getIdx());
-            gameBoard.add(new EmptyCell(playerCell.getIdx()), playerCell.getIdx());
+            if (bombsIdx.contains(playerCell.getIdx())) {
+                gameBoard.add(new ImageCell(CellType.BOMB, playerCell.getIdx()), playerCell.getIdx());
+            } else {
+                gameBoard.add(new EmptyCell(playerCell.getIdx()), playerCell.getIdx());
+            }
             gameBoard.remove(nextPosition);
             gameBoard.add(new ImageCell(CellType.PLAYER_IN_DOOR, nextPosition), nextPosition);
             playerCell.setIdx(nextPosition);
@@ -252,6 +271,7 @@ public class BoardController {
             return;
         } else if (nextCell.getCellType() == CellType.BOMB_BONUS) {
             playerCell.addBomb();
+            bonus = null;
         }
 
         if (nextCell.getCellType() != CellType.EMPTY

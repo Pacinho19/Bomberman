@@ -137,7 +137,7 @@ public class BombExplosionThread extends Thread {
             imageCell = new ImageCell(CellType.DEATH, idx);
         } else if (idx == boardController.getFinishDoorIdx()) {
             imageCell = new ImageCell(CellType.DOOR, idx);
-        } else if (idx == boardController.getBonus().getIdx()) {
+        } else if (boardController.getBonus()!=null && idx == boardController.getBonus().getIdx()) {
             imageCell = new ImageCell(CellType.BOMB_BONUS, idx);
         } else if (nextCell.getCellType() == CellType.ENEMY_COIN) {
             EnemyCell enemyCell = (EnemyCell) nextCell;
