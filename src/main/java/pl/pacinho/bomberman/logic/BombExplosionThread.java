@@ -83,7 +83,7 @@ public class BombExplosionThread extends Thread {
 
         for (Cell cell : explosionCellsIdx) {
             if (cell.getIdx() == boardController.getFinishDoorIdx()
-                    || cell.getIdx() == boardController.getBonus().getIdx()) {
+                    || (boardController.getBonus() != null && cell.getIdx() == boardController.getBonus().getIdx())) {
                 continue;
             }
             gameBoard.remove(cell);
@@ -103,6 +103,7 @@ public class BombExplosionThread extends Thread {
         Component[] components = gameBoard.getComponents();
         Cell nextCell = (Cell) components[idx];
         if (nextCell.getCellType() == CellType.WALL
+                || nextCell.getCellType() == CellType.BOMB
                 || nextCell.getCellType() == CellType.WALL_DESTRUCTIBLE
                 || nextCell.getCellType() == CellType.ENEMY_COIN
                 || nextCell.getCellType() == CellType.BOMB_EXPLOSION_HORIZONTAL
@@ -124,6 +125,7 @@ public class BombExplosionThread extends Thread {
             }
 
             if (nextCell.getCellType() == CellType.WALL
+                    || nextCell.getCellType() == CellType.BOMB
                     || nextCell.getCellType() == CellType.BOMB_EXPLOSION_HORIZONTAL
                     || nextCell.getCellType() == CellType.BOMB_EXPLOSION_VERTICAL
                     || nextCell.getCellType() == CellType.BOMB_EXPLOSION_CENTER) {
@@ -137,7 +139,7 @@ public class BombExplosionThread extends Thread {
             imageCell = new ImageCell(CellType.DEATH, idx);
         } else if (idx == boardController.getFinishDoorIdx()) {
             imageCell = new ImageCell(CellType.DOOR, idx);
-        } else if (boardController.getBonus()!=null && idx == boardController.getBonus().getIdx()) {
+        } else if (boardController.getBonus() != null && idx == boardController.getBonus().getIdx()) {
             imageCell = new ImageCell(CellType.BOMB_BONUS, idx);
         } else if (nextCell.getCellType() == CellType.ENEMY_COIN) {
             EnemyCell enemyCell = (EnemyCell) nextCell;

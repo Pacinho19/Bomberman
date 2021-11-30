@@ -1,8 +1,11 @@
 package pl.pacinho.bomberman.controller;
 
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import lombok.Getter;
 import lombok.Setter;
 import pl.pacinho.bomberman.logic.BombExplosionThread;
+import pl.pacinho.bomberman.logic.Images;
 import pl.pacinho.bomberman.logic.MonsterMoveThread;
 import pl.pacinho.bomberman.model.Bonus;
 import pl.pacinho.bomberman.model.CellType;
@@ -11,9 +14,14 @@ import pl.pacinho.bomberman.utils.RandomUtils;
 import pl.pacinho.bomberman.view.Board;
 import pl.pacinho.bomberman.view.cell.*;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -190,7 +198,6 @@ public class BoardController {
             if (cellAt == null) {
                 return;
             }
-
             if (cellAt.getCellType() == CellType.PLAYER) {
                 setBomb();
             }
