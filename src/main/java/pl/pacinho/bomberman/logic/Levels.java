@@ -5,7 +5,6 @@ import pl.pacinho.bomberman.model.Bonus;
 import pl.pacinho.bomberman.model.BonusType;
 import pl.pacinho.bomberman.model.EnemyType;
 import pl.pacinho.bomberman.model.LevelData;
-import pl.pacinho.bomberman.view.cell.PlayerCell;
 
 import java.util.HashMap;
 
@@ -27,6 +26,15 @@ public class Levels {
                         {
                             put(EnemyType.BALON, 2);
                             put(EnemyType.COIN, 2);
+                        }
+                    }));
+
+            put(3, new LevelData(
+                    new Bonus(BonusType.BOMB_DETONATE),
+                    new HashMap<EnemyType, Integer>() {
+                        {
+                            put(EnemyType.BALON, 3);
+                            put(EnemyType.COIN, 6);
                         }
                     }));
         }

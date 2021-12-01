@@ -1,6 +1,7 @@
 package pl.pacinho.bomberman.view.cell;
 
 import lombok.Getter;
+import lombok.Setter;
 import pl.pacinho.bomberman.logic.Images;
 import pl.pacinho.bomberman.model.CellType;
 import pl.pacinho.bomberman.model.PlayerEnemyDirection;
@@ -14,7 +15,11 @@ public class PlayerCell extends ImageCell {
     private int bombCount = 1;
 
     @Getter
-    private int bombRange= 1;
+    private int bombRange = 1;
+
+    @Getter
+    @Setter
+    private boolean bombDetonate = false;
 
     public PlayerCell(CellType cellType, int idx) {
         super(cellType, idx);
@@ -29,6 +34,7 @@ public class PlayerCell extends ImageCell {
     public void addBomb() {
         bombCount++;
     }
+
     public void incrementBombRange() {
         bombRange++;
     }

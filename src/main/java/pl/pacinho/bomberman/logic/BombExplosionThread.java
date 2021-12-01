@@ -35,9 +35,12 @@ public class BombExplosionThread extends Thread {
 
     @Override
     public void run() {
-        try {
-            Thread.sleep(2_000);
-        } catch (InterruptedException e) {
+
+        if (!boardController.getPlayerCell().isBombDetonate()) {
+            try {
+                Thread.sleep(2_000);
+            } catch (InterruptedException e) {
+            }
         }
 
         Component[] components = gameBoard.getComponents();
@@ -141,7 +144,7 @@ public class BombExplosionThread extends Thread {
         } else if (idx == boardController.getFinishDoorIdx()) {
             imageCell = new ImageCell(CellType.DOOR, idx);
         } else if (boardController.getBonus() != null && idx == boardController.getBonus().getIdx()) {
-            imageCell = new BonusCell(CellType.BONUS, boardController.getBonus().getBonusType() ,idx);
+            imageCell = new BonusCell(CellType.BONUS, boardController.getBonus().getBonusType(), idx);
         } else if (nextCell.getCellType() == CellType.ENEMY) {
             EnemyCell enemyCell = (EnemyCell) nextCell;
             //enemyCell.getMonsterMoveThread().interrupt();

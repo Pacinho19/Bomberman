@@ -98,8 +98,8 @@ public class BoardController {
                 .collect(Collectors.toList());
 
 
-        Cell cell = cells.get(RandomUtils.getInt(0, cells.size()));
-//        Cell cell = cells.get(RandomUtils.getInt(1, 2));
+//        Cell cell = cells.get(RandomUtils.getInt(0, cells.size()));
+        Cell cell = cells.get(RandomUtils.getInt(1, 2));
         cell.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
         bonus = levelData.getBonus();
         bonus.setIdx(cell.getIdx());
@@ -210,6 +210,9 @@ public class BoardController {
             if (cellAt.getCellType() == CellType.PLAYER) {
                 setBomb();
             }
+        }else if (e.getKeyCode() == KeyEvent.VK_Z && playerCell.isBombDetonate() && !bombsIdx.isEmpty()) {
+            new BombExplosionThread(this, bombsIdx.get(0))
+                    .start();
         }
         refresh();
     }
@@ -219,8 +222,10 @@ public class BoardController {
             return;
         }
         bombsIdx.add(playerCell.getIdx());
-        new BombExplosionThread(this, playerCell.getIdx())
-                .start();
+        if(!playerCell.isBombDetonate()) {
+            new BombExplosionThread(this, playerCell.getIdx())
+                    .start();
+        }
 
         gameBoard.remove(playerCell.getIdx());
         gameBoard.add(new ImageCell(CellType.PLAYER_ON_BOMB, playerCell.getIdx()), playerCell.getIdx());
@@ -264,7 +269,7 @@ public class BoardController {
             gameBoard.remove(nextPosition);
             gameBoard.add(new ImageCell(CellType.PLAYER_IN_DOOR, nextPosition), nextPosition);
             refresh();
-            JOptionPane.showMessageDialog(board, "Level Complete!");
+            JOptionPane.showMessageDialog(board, "Level Completed!");
             board.dispose();
             new Board(board.getLevel() + 1).setVisible(true);
             return;
@@ -291,6 +296,8 @@ public class BoardController {
                 playerCell.addBomb();
             }else if(bonus.getBonusType()==BonusType.BOMB_RANGE){
                 playerCell.incrementBombRange();
+            }else if(bonus.getBonusType()==BonusType.BOMB_DETONATE){
+                playerCell.setBombDetonate(true);
             }
             bonus = null;
         }

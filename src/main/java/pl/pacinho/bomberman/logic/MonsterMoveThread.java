@@ -91,6 +91,8 @@ public class MonsterMoveThread extends Thread implements ActionListener {
 
         if (cell.getCellType() != CellType.WALL
                 && cell.getCellType() != CellType.WALL_DESTRUCTIBLE
+                && cell.getCellType() != CellType.ENEMY
+                && cell.getCellType() != CellType.BONUS
                 && cell.getCellType() != CellType.BOMB
                 && cell.getCellType() != CellType.BOMB_EXPLOSION_VERTICAL
                 && cell.getCellType() != CellType.BOMB_EXPLOSION_HORIZONTAL) {

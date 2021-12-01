@@ -30,6 +30,7 @@ public class Images {
     private static final BufferedImage playerOnBomb = loadPNG("PlayerOnBomb.png");
     private static final BufferedImage bombBonus = loadPNG("BombBonus.png");
     private static final BufferedImage bombRangeBonus = loadPNG("BombRangeBonus.png");
+    private static final BufferedImage bombDetonateBonus = loadPNG("BombDetonateBonus.png");
     private static final ImageIcon enemyCoin = loadGIF("EnemyCoin");
     private static final ImageIcon enemyBalon = loadGIF("EnemyBalon");
 
@@ -84,6 +85,8 @@ public class Images {
                 return bombBonus;
             case BOMB_RANGE:
                 return bombRangeBonus;
+            case BOMB_DETONATE:
+                return bombDetonateBonus;
         }
         return null;
     }
