@@ -23,7 +23,6 @@ import java.util.stream.IntStream;
 
 public class BoardController {
 
-    private final int enemiesCount = 5;
     private Board board;
     @Getter
     @Setter

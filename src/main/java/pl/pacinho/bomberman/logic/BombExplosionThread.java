@@ -31,6 +31,7 @@ public class BombExplosionThread extends Thread {
         this.idx = idx;
         explosionCellsIdx = new ArrayList<>();
         gameBoard = boardController.getGameBoard();
+        this.setName("Bomb " + idx);
     }
 
     @Override
