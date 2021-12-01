@@ -202,7 +202,7 @@ public class BoardController {
                 || e.getKeyCode() == KeyEvent.VK_DOWN) {
             playerCell.setDirection(PlayerEnemyDirection.findByKey(e));
             playerMove();
-        } else if ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0) {
+        } else if (e.getKeyCode() == KeyEvent.VK_X) {
             Cell cellAt = getCellAt(playerCell.getIdx());
             if (cellAt == null) {
                 return;
@@ -289,6 +289,8 @@ public class BoardController {
         } else if (nextCell.getCellType() == CellType.BONUS) {
             if (bonus.getBonusType() == BonusType.BOMB) {
                 playerCell.addBomb();
+            }else if(bonus.getBonusType()==BonusType.BOMB_RANGE){
+                playerCell.incrementBombRange();
             }
             bonus = null;
         }

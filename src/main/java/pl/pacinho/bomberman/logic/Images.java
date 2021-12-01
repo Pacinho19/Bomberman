@@ -29,6 +29,7 @@ public class Images {
     private static final BufferedImage playerInDoor = loadPNG("PlayerInDoor.png");
     private static final BufferedImage playerOnBomb = loadPNG("PlayerOnBomb.png");
     private static final BufferedImage bombBonus = loadPNG("BombBonus.png");
+    private static final BufferedImage bombRangeBonus = loadPNG("BombRangeBonus.png");
     private static final ImageIcon enemyCoin = loadGIF("EnemyCoin");
     private static final ImageIcon enemyBalon = loadGIF("EnemyBalon");
 
@@ -81,6 +82,8 @@ public class Images {
         switch (bonusType) {
             case BOMB:
                 return bombBonus;
+            case BOMB_RANGE:
+                return bombRangeBonus;
         }
         return null;
     }

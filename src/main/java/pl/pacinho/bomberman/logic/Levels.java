@@ -22,7 +22,7 @@ public class Levels {
                         }
                     }));
             put(2, new LevelData(
-                    new Bonus(BonusType.BOMB),
+                    new Bonus(BonusType.BOMB_RANGE),
                     new HashMap<EnemyType, Integer>() {
                         {
                             put(EnemyType.BALON, 2);
