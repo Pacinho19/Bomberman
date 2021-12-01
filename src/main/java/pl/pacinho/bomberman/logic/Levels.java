@@ -17,7 +17,7 @@ public class Levels {
                     new Bonus(BonusType.BOMB),
                     new HashMap<EnemyType, Integer>() {
                         {
-                            put(EnemyType.BALON, 1);
+                            put(EnemyType.BALON, 3);
                         }
                     }));
             put(2, new LevelData(
@@ -28,7 +28,6 @@ public class Levels {
                             put(EnemyType.COIN, 2);
                         }
                     }));
-
             put(3, new LevelData(
                     new Bonus(BonusType.BOMB_DETONATE),
                     new HashMap<EnemyType, Integer>() {

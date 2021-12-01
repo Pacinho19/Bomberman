@@ -98,8 +98,8 @@ public class BoardController {
                 .collect(Collectors.toList());
 
 
-//        Cell cell = cells.get(RandomUtils.getInt(0, cells.size()));
-        Cell cell = cells.get(RandomUtils.getInt(1, 2));
+        Cell cell = cells.get(RandomUtils.getInt(0, cells.size()));
+//        Cell cell = cells.get(RandomUtils.getInt(1, 2));
         cell.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
         bonus = levelData.getBonus();
         bonus.setIdx(cell.getIdx());

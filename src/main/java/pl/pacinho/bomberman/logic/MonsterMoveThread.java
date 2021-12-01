@@ -2,6 +2,7 @@ package pl.pacinho.bomberman.logic;
 
 import pl.pacinho.bomberman.controller.BoardController;
 import pl.pacinho.bomberman.model.CellType;
+import pl.pacinho.bomberman.model.EnemyType;
 import pl.pacinho.bomberman.model.PlayerEnemyDirection;
 import pl.pacinho.bomberman.utils.RandomUtils;
 import pl.pacinho.bomberman.view.cell.Cell;
@@ -23,7 +24,7 @@ public class MonsterMoveThread extends Thread implements ActionListener {
     public MonsterMoveThread(BoardController controller, EnemyCell enemyCell) {
         this.controller = controller;
         this.enemyCell = enemyCell;
-        timer = new Timer(150, this);
+        timer = new Timer(enemyCell.getEnemyType().getMoveDelay(), this);
         enemyCell.setDirection(PlayerEnemyDirection.RIGHT);
     }
 
@@ -71,7 +72,7 @@ public class MonsterMoveThread extends Thread implements ActionListener {
 
         if (cell2 != null
                 && (cell2.getCellType() == CellType.BOMB_EXPLOSION_VERTICAL
-                || cell2.getCellType() == CellType.BOMB_EXPLOSION_HORIZONTAL)){
+                || cell2.getCellType() == CellType.BOMB_EXPLOSION_HORIZONTAL)) {
             controller.getEnemies().remove(enemyCell);
             timer.stop();
             Thread.interrupted();
@@ -111,7 +112,16 @@ public class MonsterMoveThread extends Thread implements ActionListener {
             return;
         }
 
-        PlayerEnemyDirection direction = RandomUtils.getEnemyDirection();
-        enemyCell.setDirection(direction);
+        if (enemyCell.getEnemyType() == EnemyType.COIN) {
+            PlayerEnemyDirection direction = RandomUtils.getEnemyDirection();
+            enemyCell.setDirection(direction);
+        } else if (cell.getCellType() == CellType.BONUS
+                || cell.getCellType() == CellType.WALL
+                || cell.getCellType() == CellType.WALL_DESTRUCTIBLE
+                || cell.getCellType() == CellType.DOOR
+                || cell.getCellType() == CellType.ENEMY){
+            PlayerEnemyDirection direction = RandomUtils.getEnemyDirection();
+            enemyCell.setDirection(direction);
+        }
     }
 }

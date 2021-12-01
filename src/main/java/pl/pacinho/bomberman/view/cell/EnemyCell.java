@@ -23,9 +23,13 @@ public class EnemyCell extends Cell{
     private MonsterMoveThread monsterMoveThread;
 
     private ImageIcon image;
+    
+    @Getter
+    private  EnemyType enemyType;
 
     public EnemyCell(CellType cellType, EnemyType enemyType, int idx) {
         super(cellType, idx);
+        this.enemyType=enemyType;
         image = Images.getEnemyGIF(enemyType);
     }
 
