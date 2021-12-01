@@ -5,6 +5,7 @@ import lombok.Setter;
 import pl.pacinho.bomberman.logic.Images;
 import pl.pacinho.bomberman.logic.MonsterMoveThread;
 import pl.pacinho.bomberman.model.CellType;
+import pl.pacinho.bomberman.model.EnemyType;
 import pl.pacinho.bomberman.model.PlayerEnemyDirection;
 
 import javax.swing.*;
@@ -23,10 +24,9 @@ public class EnemyCell extends Cell{
 
     private ImageIcon image;
 
-    public EnemyCell(CellType cellType, int idx) {
+    public EnemyCell(CellType cellType, EnemyType enemyType, int idx) {
         super(cellType, idx);
-        image = Images.getImageGIF(cellType);
-
+        image = Images.getEnemyGIF(enemyType);
     }
 
     @Override

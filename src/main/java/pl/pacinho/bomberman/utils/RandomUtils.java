@@ -18,14 +18,4 @@ public class RandomUtils {
         return Arrays.asList(PlayerEnemyDirection.values())
                 .get(getInt(0, PlayerEnemyDirection.values().length));
     }
-
-    private static final List<CellType> bonuses = new ArrayList<CellType>(){
-        {
-            add(CellType.BOMB_BONUS);
-            add(CellType.BOMB_BONUS);
-        }
-    };
-    public static CellType getBonus(){
-        return bonuses.get(getInt(0, bonuses.size()-1));
-    }
 }

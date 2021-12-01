@@ -1,29 +1,21 @@
 package pl.pacinho.bomberman.controller;
 
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import lombok.Getter;
 import lombok.Setter;
 import pl.pacinho.bomberman.logic.BombExplosionThread;
-import pl.pacinho.bomberman.logic.Images;
+import pl.pacinho.bomberman.logic.Levels;
 import pl.pacinho.bomberman.logic.MonsterMoveThread;
-import pl.pacinho.bomberman.model.Bonus;
-import pl.pacinho.bomberman.model.CellType;
-import pl.pacinho.bomberman.model.PlayerEnemyDirection;
+import pl.pacinho.bomberman.model.*;
 import pl.pacinho.bomberman.utils.RandomUtils;
 import pl.pacinho.bomberman.view.Board;
 import pl.pacinho.bomberman.view.cell.*;
 
-import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.FileInputStream;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -48,6 +40,7 @@ public class BoardController {
     @Getter
     private Bonus bonus;
 
+    private LevelData levelData;
 
     public BoardController(Board board) {
         this.board = board;
@@ -55,6 +48,11 @@ public class BoardController {
         enemies = new ArrayList<>();
         gameBoard = board.getBoardPanel();
         boardSize = board.getBoardSize();
+        levelData = Levels.getLevelsMap().get(board.getLevel());
+        if(levelData==null){
+            JOptionPane.showMessageDialog(board, "No more levels! Develop in progress...");
+            System.exit(0);
+        }
     }
 
     public void createGameBoard() {
@@ -88,7 +86,7 @@ public class BoardController {
         addDestructibleWalls();
         initFinishDoorIndex();
         addBonus();
-        IntStream.range(0, enemiesCount).forEach(i -> addEnemies());
+        addEnemies();
         refresh();
     }
 
@@ -102,24 +100,31 @@ public class BoardController {
         Cell cell = cells.get(RandomUtils.getInt(0, cells.size()));
 //        Cell cell = cells.get(RandomUtils.getInt(1, 2));
         cell.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
-        bonus = new Bonus(RandomUtils.getBonus(), cell.getIdx());
+        bonus = levelData.getBonus();
+        bonus.setIdx(cell.getIdx());
     }
 
     private void addEnemies() {
-        List<Cell> cells = getCells()
-                .stream()
-                .filter(c -> c.getCellType() == CellType.EMPTY)
-                .collect(Collectors.toList());
 
-        Cell cell = cells.get(RandomUtils.getInt(0, cells.size()));
-        gameBoard.remove(cell);
-        EnemyCell enemyCell = new EnemyCell(CellType.ENEMY_COIN, cell.getIdx());
-        gameBoard.add(enemyCell, cell.getIdx());
+        HashMap<EnemyType, Integer> enemyCount = levelData.getEnemyCount();
+        enemyCount.forEach((enemyType, integer) -> {
+            for (int i = 0; i < integer; i++) {
+                List<Cell> cells = getCells()
+                        .stream()
+                        .filter(c -> c.getCellType() == CellType.EMPTY)
+                        .collect(Collectors.toList());
 
-        enemies.add(enemyCell);
-        MonsterMoveThread monsterMoveThread = new MonsterMoveThread(this, enemyCell);
-        monsterMoveThread.start();
-        enemyCell.setMonsterMoveThread(monsterMoveThread);
+                Cell cell = cells.get(RandomUtils.getInt(0, cells.size()));
+                gameBoard.remove(cell);
+                EnemyCell enemyCell = new EnemyCell(CellType.ENEMY, enemyType, cell.getIdx());
+                gameBoard.add(enemyCell, cell.getIdx());
+                enemies.add(enemyCell);
+                MonsterMoveThread monsterMoveThread = new MonsterMoveThread(this, enemyCell);
+                monsterMoveThread.start();
+                enemyCell.setMonsterMoveThread(monsterMoveThread);
+            }
+        });
+
     }
 
     private void initFinishDoorIndex() {
@@ -132,7 +137,6 @@ public class BoardController {
 //        Cell cell = cells.get(RandomUtils.getInt(0, 1));
         cell.setBorder(BorderFactory.createLineBorder(Color.RED));
         finishDoorIdx = cell.getIdx();
-        System.out.println(finishDoorIdx);
     }
 
     private void addDestructibleWalls() {
@@ -150,8 +154,6 @@ public class BoardController {
             gameBoard.remove(cell.getIdx());
             gameBoard.add(new ImageCell(CellType.WALL_DESTRUCTIBLE, cell.getIdx()), cell.getIdx());
         }
-
-
     }
 
     private Cell takeCell(int idx, List<Cell> cells) {
@@ -256,7 +258,8 @@ public class BoardController {
             gameBoard.add(new ImageCell(CellType.PLAYER_IN_DOOR, nextPosition), nextPosition);
             refresh();
             JOptionPane.showMessageDialog(board, "Level Complete!");
-            playerCell = null;
+            board.dispose();
+            new Board(board.getLevel()+1).setVisible(true);
             return;
         } else if (nextCell.getCellType() == CellType.DOOR && !enemies.isEmpty()) {
             gameBoard.remove(playerCell.getIdx());
@@ -276,13 +279,15 @@ public class BoardController {
             gameBoard.add(playerCell, nextPosition);
             playerCell.setIdx(nextPosition);
             return;
-        } else if (nextCell.getCellType() == CellType.BOMB_BONUS) {
-            playerCell.addBomb();
+        } else if (nextCell.getCellType() == CellType.BONUS) {
+            if (bonus.getBonusType() == BonusType.BOMB) {
+                playerCell.addBomb();
+            }
             bonus = null;
         }
 
         if (nextCell.getCellType() != CellType.EMPTY
-                && nextCell.getCellType() != CellType.BOMB_BONUS) {
+                && nextCell.getCellType() != CellType.BONUS) {
             return;
         }
 

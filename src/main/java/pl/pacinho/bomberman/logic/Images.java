@@ -1,6 +1,8 @@
 package pl.pacinho.bomberman.logic;
 
+import pl.pacinho.bomberman.model.BonusType;
 import pl.pacinho.bomberman.model.CellType;
+import pl.pacinho.bomberman.model.EnemyType;
 import pl.pacinho.bomberman.model.PlayerEnemyDirection;
 
 import javax.imageio.ImageIO;
@@ -26,8 +28,9 @@ public class Images {
     private static final BufferedImage door = loadPNG("Door.png");
     private static final BufferedImage playerInDoor = loadPNG("PlayerInDoor.png");
     private static final BufferedImage playerOnBomb = loadPNG("PlayerOnBomb.png");
-    private static final BufferedImage bombBonus =loadPNG("BombBonus.png");
+    private static final BufferedImage bombBonus = loadPNG("BombBonus.png");
     private static final ImageIcon enemyCoin = loadGIF("EnemyCoin");
+    private static final ImageIcon enemyBalon = loadGIF("EnemyBalon");
 
     private static ImageIcon loadGIF(String name) {
         URL url = Images.class.getClassLoader().getResource("img/" + name + ".gif");
@@ -70,7 +73,13 @@ public class Images {
                 return playerInDoor;
             case PLAYER_ON_BOMB:
                 return playerOnBomb;
-            case BOMB_BONUS:
+        }
+        return null;
+    }
+
+    public static BufferedImage getBonusImage(BonusType bonusType) {
+        switch (bonusType) {
+            case BOMB:
                 return bombBonus;
         }
         return null;
@@ -92,8 +101,18 @@ public class Images {
 
     public static ImageIcon getImageGIF(CellType cellType) {
         switch (cellType) {
-            case ENEMY_COIN:
+            case ENEMY:
                 return enemyCoin;
+        }
+        return null;
+    }
+
+    public static ImageIcon getEnemyGIF(EnemyType enemyType) {
+        switch (enemyType) {
+            case COIN:
+                return enemyCoin;
+            case BALON:
+                return enemyBalon;
         }
         return null;
     }

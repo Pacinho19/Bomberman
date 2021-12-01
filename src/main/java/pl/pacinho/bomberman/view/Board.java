@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class Board extends JFrame  {
+public class Board extends JFrame {
 
     @Getter
     private JPanel boardPanel;
@@ -19,8 +19,13 @@ public class Board extends JFrame  {
     @Getter
     private int boardSize = 21;
 
+    @Getter
+    private int level;
+
     private Board self = this;
-    public Board() {
+
+    public Board(int level) {
+        this.level = level;
 
         this.setTitle("Bomberman");
         this.setSize(1000, 1000);

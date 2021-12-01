@@ -1,17 +1,22 @@
 package pl.pacinho.bomberman.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class Bonus {
 
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     private CellType cellType;
+    private BonusType bonusType;
     private int idx;
 
+    public Bonus() {
+        this.cellType=CellType.BONUS;
+    }
+
+    public Bonus(BonusType bonusType) {
+        this.bonusType = bonusType;
+    }
 }

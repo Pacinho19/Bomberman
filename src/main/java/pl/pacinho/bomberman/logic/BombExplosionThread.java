@@ -3,6 +3,7 @@ package pl.pacinho.bomberman.logic;
 import pl.pacinho.bomberman.controller.BoardController;
 import pl.pacinho.bomberman.model.CellType;
 import pl.pacinho.bomberman.model.ExplosionDirection;
+import pl.pacinho.bomberman.view.cell.BonusCell;
 import pl.pacinho.bomberman.view.cell.Cell;
 import pl.pacinho.bomberman.view.cell.EnemyCell;
 import pl.pacinho.bomberman.view.cell.ImageCell;
@@ -105,7 +106,7 @@ public class BombExplosionThread extends Thread {
         if (nextCell.getCellType() == CellType.WALL
                 || nextCell.getCellType() == CellType.BOMB
                 || nextCell.getCellType() == CellType.WALL_DESTRUCTIBLE
-                || nextCell.getCellType() == CellType.ENEMY_COIN
+                || nextCell.getCellType() == CellType.ENEMY
                 || nextCell.getCellType() == CellType.BOMB_EXPLOSION_HORIZONTAL
                 || nextCell.getCellType() == CellType.BOMB_EXPLOSION_VERTICAL
                 || nextCell.getCellType() == CellType.BOMB_EXPLOSION_CENTER) {
@@ -133,15 +134,15 @@ public class BombExplosionThread extends Thread {
             }
         }
 
-        ImageCell imageCell = new ImageCell(cellType, idx);
+        Cell imageCell = new ImageCell(cellType, idx);
         if (nextCell.getCellType() == CellType.PLAYER) {
             playerKill = true;
             imageCell = new ImageCell(CellType.DEATH, idx);
         } else if (idx == boardController.getFinishDoorIdx()) {
             imageCell = new ImageCell(CellType.DOOR, idx);
         } else if (boardController.getBonus() != null && idx == boardController.getBonus().getIdx()) {
-            imageCell = new ImageCell(CellType.BOMB_BONUS, idx);
-        } else if (nextCell.getCellType() == CellType.ENEMY_COIN) {
+            imageCell = new BonusCell(CellType.BONUS, boardController.getBonus().getBonusType() ,idx);
+        } else if (nextCell.getCellType() == CellType.ENEMY) {
             EnemyCell enemyCell = (EnemyCell) nextCell;
             //enemyCell.getMonsterMoveThread().interrupt();
             boardController.getEnemies().remove(nextCell);
