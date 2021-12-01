@@ -3,6 +3,7 @@ package pl.pacinho.bomberman.controller;
 import lombok.Getter;
 import lombok.Setter;
 import pl.pacinho.bomberman.logic.BombExplosionThread;
+import pl.pacinho.bomberman.logic.GameProperties;
 import pl.pacinho.bomberman.logic.Levels;
 import pl.pacinho.bomberman.logic.MonsterMoveThread;
 import pl.pacinho.bomberman.model.*;
@@ -49,7 +50,7 @@ public class BoardController {
         gameBoard = board.getBoardPanel();
         boardSize = board.getBoardSize();
         levelData = Levels.getLevelsMap().get(board.getLevel());
-        if(levelData==null){
+        if (levelData == null) {
             JOptionPane.showMessageDialog(board, "No more levels! Develop in progress...");
             System.exit(0);
         }
@@ -180,7 +181,13 @@ public class BoardController {
     private void addPlayer() {
         int pos = boardSize + 1;
         gameBoard.remove(pos);
-        playerCell = new PlayerCell(CellType.PLAYER, pos);
+        playerCell = GameProperties.getPlayerCell();
+        if (playerCell == null) {
+            playerCell = new PlayerCell(CellType.PLAYER, pos);
+            GameProperties.setPlayerCell(playerCell);
+        } else {
+            playerCell.setIdx(pos);
+        }
         gameBoard.add(playerCell, pos);
     }
 
@@ -259,7 +266,7 @@ public class BoardController {
             refresh();
             JOptionPane.showMessageDialog(board, "Level Complete!");
             board.dispose();
-            new Board(board.getLevel()+1).setVisible(true);
+            new Board(board.getLevel() + 1).setVisible(true);
             return;
         } else if (nextCell.getCellType() == CellType.DOOR && !enemies.isEmpty()) {
             gameBoard.remove(playerCell.getIdx());
